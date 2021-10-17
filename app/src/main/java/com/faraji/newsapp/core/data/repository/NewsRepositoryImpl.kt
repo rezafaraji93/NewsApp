@@ -7,13 +7,16 @@ import com.faraji.newsapp.core.data.remote.NewsApi
 import com.faraji.newsapp.core.domain.models.Article
 import com.faraji.newsapp.core.domain.models.News
 import com.faraji.newsapp.core.domain.response.Resource
+import com.faraji.newsapp.db.ArticleDao
 import com.faraji.newsapp.feature_breaking_news.data.remote.paging.BreakingNewsSource
 import kotlinx.coroutines.flow.Flow
 import okio.IOException
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class NewsRepositoryImpl(
-    private val api: NewsApi
+class NewsRepositoryImpl @Inject constructor(
+    private val api: NewsApi,
+    private val db: ArticleDao
 ) : NewsRepository {
 
     override val breakingNews: Flow<PagingData<Article>>
@@ -36,5 +39,18 @@ class NewsRepositoryImpl(
                 Resource.Error(msg)
             } ?: Resource.Error("Unknown error occured!")
         }
+    }
+
+    override suspend fun addToFavorites(article: Article): Long {
+        return db.upsert(article)
+    }
+
+    override suspend fun getFavoritesNews(): Resource<List<Article>> {
+        val result = db.getAllArticles()
+        return Resource.Success(result)
+    }
+
+    override suspend fun deleteFromFavorites(article: Article) {
+        return db.deleteArticle(article)
     }
 }

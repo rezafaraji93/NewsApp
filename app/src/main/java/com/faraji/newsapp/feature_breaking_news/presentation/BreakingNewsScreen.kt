@@ -1,13 +1,15 @@
 package com.faraji.newsapp.feature_breaking_news.presentation
 
-import androidx.compose.foundation.layout.*
+import android.util.Log
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -58,7 +60,11 @@ fun BreakingNewsScreen(
                             content = it.content
                         )
                     ) {
-                        navController.navigate(Screen.SavedNewsScreen.route)
+                        navController.navigate(
+                            Screen.NewsDetailScreen.route + "?source=${news.source?.name}&author=${news.author}&title=${news.title}" +
+                                    "&description=${news.description}&newsUrl=${news.url}" +
+                                    "&imageUrl=${news.urlToImage}&publishedAt=${news.publishedAt}"
+                        )
                     }
                     Divider()
                 }

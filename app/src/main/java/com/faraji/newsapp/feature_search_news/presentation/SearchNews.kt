@@ -26,7 +26,6 @@ fun SearchNews(
     val searchFieldState = viewModel.searchTextFieldState.value
     val searchedNews = viewModel.state.value.news
 
-
     Box(
         modifier = Modifier
             .fillMaxSize()

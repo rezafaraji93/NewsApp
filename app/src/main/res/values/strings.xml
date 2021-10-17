@@ -5,4 +5,6 @@
     <string name="password_visible_content_description">Password visible</string>
     <string name="password_invisible_content_description">passwordInvisible</string>
     <string name="search_news_query">Search for news</string>
+    <string name="unkown_error">Unknown error occurred</string>
+    <string name="add_to_favorites">Add to favorites</string>
 </resources>

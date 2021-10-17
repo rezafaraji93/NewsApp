@@ -12,4 +12,10 @@ interface NewsRepository {
     val breakingNews: Flow<PagingData<Article>>
 
     suspend fun searchForNews(query: String, pageNumber: Int): Resource<News>
+
+    suspend fun addToFavorites(article: Article): Long
+
+    suspend fun getFavoritesNews(): Resource<List<Article>>
+
+    suspend fun deleteFromFavorites(article: Article)
 }
