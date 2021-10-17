@@ -1,4 +1,4 @@
-package com.faraji.newsapp.feature_breaking_news.domain.use_cases
+package com.faraji.newsapp.core.domain.use_cases
 
 import androidx.paging.PagingData
 import com.faraji.newsapp.core.data.repository.NewsRepository

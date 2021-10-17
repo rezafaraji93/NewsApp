@@ -1,4 +1,4 @@
-package com.faraji.newsapp.feature_news_detail.domain.use_case
+package com.faraji.newsapp.core.domain.use_cases
 
 import com.faraji.newsapp.core.data.repository.NewsRepository
 import com.faraji.newsapp.core.domain.models.Article

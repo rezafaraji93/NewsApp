@@ -1,5 +1,6 @@
 package com.faraji.newsapp.core.presentation.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -14,6 +15,7 @@ import com.faraji.newsapp.feature_saved_news.presentation.SavedNews
 import com.faraji.newsapp.feature_search_news.presentation.SearchNews
 import com.faraji.newsapp.feature_splash_screen.presentation.SplashScreen
 
+@ExperimentalFoundationApi
 @Composable
 fun Navigation(
     navController: NavHostController,
@@ -33,10 +35,16 @@ fun Navigation(
             )
         }
         composable(Screen.SavedNewsScreen.route) {
-            SavedNews(navController = navController)
+            SavedNews(
+                navController = navController,
+                scaffoldState = scaffoldState
+            )
         }
         composable(Screen.SearchNewsScreen.route) {
-            SearchNews(navController = navController)
+            SearchNews(
+                navController = navController,
+                scaffoldState = scaffoldState
+            )
         }
         composable(
             route = Screen.NewsDetailScreen.route.plus(
@@ -81,7 +89,7 @@ fun Navigation(
                 }
             )
         ) {
-            NewsDetailScreen(navController = navController)
+            NewsDetailScreen(scaffoldState = scaffoldState)
         }
     }
 }

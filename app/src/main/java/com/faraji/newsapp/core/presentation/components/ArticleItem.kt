@@ -1,7 +1,9 @@
 package com.faraji.newsapp.core.presentation.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,16 +19,21 @@ import com.faraji.newsapp.core.domain.models.Article
 import com.faraji.newsapp.core.presentation.ui.theme.SpaceMedium
 import com.faraji.newsapp.core.presentation.ui.theme.SpaceSmall
 
+@ExperimentalFoundationApi
 @Composable
 fun ArticleItem(
     article: Article,
     modifier: Modifier = Modifier,
-    onArticleClick: () -> Unit
+    onArticleClick: () -> Unit,
+    onArticleLongPress: (() -> Unit)? = null
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onArticleClick() }
+            .combinedClickable(
+                onClick = onArticleClick,
+                onLongClick = onArticleLongPress,
+            )
             .padding(SpaceMedium)
 
     ) {

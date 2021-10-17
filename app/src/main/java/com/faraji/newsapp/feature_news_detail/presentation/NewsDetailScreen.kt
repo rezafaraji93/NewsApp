@@ -2,7 +2,6 @@ package com.faraji.newsapp.feature_news_detail.presentation
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -12,33 +11,48 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.faraji.newsapp.R
-import com.faraji.newsapp.core.domain.models.Article
-import com.faraji.newsapp.core.domain.models.Source
-import kotlinx.coroutines.launch
+import com.faraji.newsapp.core.util.UiEvent
+import com.faraji.newsapp.core.util.asString
+import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun NewsDetailScreen(
-    navController: NavController,
+    scaffoldState: ScaffoldState,
     viewModel: NewsDetailViewModel = hiltViewModel()
 ) {
 
-    val state = viewModel.webPageState.value
-    val scope = rememberCoroutineScope()
-    Log.e("TAG", "NewsDetailScreen: ${state.imageUrl} + ${state.title} ---- ${state.newsUrl}")
+    val state = viewModel.webPageState
+    val article = state.value.toArticle()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UiEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        event.uiText.asString(context)
+                    )
+                }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -60,12 +74,12 @@ fun NewsDetailScreen(
                                     favicon: Bitmap?
                                 ) {
                                     super.onPageStarted(view, url, favicon)
-                                    viewModel.onProgressChanged(true)
+                                    viewModel.onEvent(NewsDetailEvent.OnProgressChanged(true))
                                 }
 
                                 override fun onPageFinished(view: WebView?, url: String?) {
                                     super.onPageFinished(view, url)
-                                    viewModel.onProgressChanged(false)
+                                    viewModel.onEvent(NewsDetailEvent.OnProgressChanged(false))
                                 }
                             }
                             webViewClient = webClient
@@ -76,16 +90,15 @@ fun NewsDetailScreen(
                                 javaScriptCanOpenWindowsAutomatically = true
                                 domStorageEnabled = true
                             }
-                            state.newsUrl?.let { url ->
+                            state.value.newsUrl?.let { url ->
                                 loadUrl(url)
                             }
-
                         }
                     },
                     modifier = Modifier.fillMaxSize()
                 )
                 Box(modifier = Modifier.fillMaxSize()) {
-                    if (state.isLoading) {
+                    if (state.value.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier
                                 .align(Alignment.Center),
@@ -97,22 +110,7 @@ fun NewsDetailScreen(
                             .align(Alignment.BottomEnd)
                             .padding(end = 12.dp, bottom = 12.dp),
                         onClick = {
-                            scope.launch {
-                                state.let { article ->
-                                    viewModel.onFabPressed(
-                                        Article(
-                                            source = Source("1", article.source ?: ""),
-                                            author = article.author,
-                                            title = article.title,
-                                            description = article.description,
-                                            url = article.newsUrl,
-                                            urlToImage = article.imageUrl,
-                                            publishedAt = article.publishedAt,
-                                            content = ""
-                                        )
-                                    )
-                                }
-                            }
+                            viewModel.onEvent(NewsDetailEvent.SaveArticle(article))
 
                         },
                     ) {

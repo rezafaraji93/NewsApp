@@ -1,30 +1,53 @@
 package com.faraji.newsapp.feature_search_news.presentation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.faraji.newsapp.R
-import com.faraji.newsapp.core.domain.models.Article
 import com.faraji.newsapp.core.presentation.components.ArticleItem
 import com.faraji.newsapp.core.presentation.components.CustomTextField
 import com.faraji.newsapp.core.presentation.ui.theme.SpaceSmall
-import com.faraji.newsapp.core.util.Screen
+import com.faraji.newsapp.core.util.UiEvent
+import com.faraji.newsapp.core.util.asString
+import kotlinx.coroutines.flow.collectLatest
 
+@ExperimentalFoundationApi
 @Composable
 fun SearchNews(
     navController: NavController,
+    scaffoldState: ScaffoldState,
     viewModel: SearchNewsViewModel = hiltViewModel()
 ) {
 
     val searchFieldState = viewModel.searchTextFieldState.value
     val searchedNews = viewModel.state.value.news
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UiEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        event.uiText.asString(context)
+                    )
+                }
+                is UiEvent.Navigate -> {
+                    navController.navigate(event.route)
+                }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -49,21 +72,11 @@ fun SearchNews(
 
                     items(searchedNews) { article ->
                         ArticleItem(
-
-                            article = Article(
-                                source = article.source,
-                                author = article.author,
-                                title = article.title,
-                                description = article.description,
-                                url = article.url,
-                                urlToImage = article.urlToImage,
-                                publishedAt = article.publishedAt,
-                                content = article.content
-                            )
-
-                        ) {
-                            navController.navigate(Screen.SavedNewsScreen.route)
-                        }
+                            article = article,
+                            onArticleClick = {
+                                viewModel.onEvent(SearchNewsEvent.OnArticleClicked(article))
+                            }
+                        )
                         Divider()
                     }
                 }

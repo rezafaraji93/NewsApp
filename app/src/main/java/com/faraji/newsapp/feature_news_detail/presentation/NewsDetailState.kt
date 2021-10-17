@@ -1,5 +1,8 @@
 package com.faraji.newsapp.feature_news_detail.presentation
 
+import com.faraji.newsapp.core.domain.models.Article
+import com.faraji.newsapp.core.domain.models.Source
+
 data class NewsDetailState(
     val source: String? = null,
     val author: String? = null,
@@ -9,4 +12,17 @@ data class NewsDetailState(
     val imageUrl: String? = null,
     val publishedAt: String? = null,
     val isLoading: Boolean = true
-)
+) {
+    fun toArticle(): Article {
+        return Article(
+            source = Source("", source),
+            author = author,
+            title = title,
+            description = description,
+            url = newsUrl,
+            urlToImage = imageUrl,
+            publishedAt = publishedAt,
+            content = ""
+        )
+    }
+}
