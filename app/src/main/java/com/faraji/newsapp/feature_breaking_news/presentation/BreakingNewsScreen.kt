@@ -1,10 +1,7 @@
 package com.faraji.newsapp.feature_breaking_news.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
@@ -42,15 +39,16 @@ fun BreakingNewsScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is UiEvent.Navigate -> {
-                     navController.navigate(event.route)
+                    navController.navigate(event.route)
                 }
             }
         }
     }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(bottom = 56.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 56.dp)
     ) {
         Box(
             modifier = Modifier
@@ -104,5 +102,4 @@ fun BreakingNewsScreen(
             }
         }
     }
-
 }

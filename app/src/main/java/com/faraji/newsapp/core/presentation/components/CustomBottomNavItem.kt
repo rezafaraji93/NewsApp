@@ -23,16 +23,14 @@ import com.faraji.newsapp.core.presentation.ui.theme.SpaceSmall
 @Composable
 fun RowScope.CustomBottomNavItem(
     modifier: Modifier = Modifier,
-    selected: Boolean = false,
-    selectedColor: Color = MaterialTheme.colors.onPrimary,
-    unselectedColor: Color = MaterialTheme.colors.primaryVariant,
-    enabled: Boolean = false,
     icon: ImageVector? = null,
     contentDescription: String? = null,
+    selected: Boolean = false,
+    selectedColor: Color = Color.White,
+    unselectedColor: Color = Color.Red,
+    enabled: Boolean = true,
     onClick: () -> Unit
-
 ) {
-
     val lineLength = animateFloatAsState(
         targetValue = if (selected) 1f else 0f,
         animationSpec = tween(
@@ -43,8 +41,8 @@ fun RowScope.CustomBottomNavItem(
     BottomNavigationItem(
         modifier = modifier,
         selected = selected,
-        enabled = enabled,
         onClick = onClick,
+        enabled = enabled,
         selectedContentColor = selectedColor,
         unselectedContentColor = unselectedColor,
         icon = {

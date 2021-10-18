@@ -36,13 +36,13 @@ class MainActivity : ComponentActivity() {
                     val scaffoldState = rememberScaffoldState()
                     CustomScaffold(
                         navController = navController,
-                        state = scaffoldState,
                         showBottomBar = navBackStackEntry?.destination?.route in listOf(
                             Screen.BreakingNewsScreen.route,
                             Screen.SavedNewsScreen.route,
                             Screen.SearchNewsScreen.route,
                             Screen.NewsDetailScreen.route
                         ),
+                        state = scaffoldState,
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Navigation(navController = navController, scaffoldState = scaffoldState)

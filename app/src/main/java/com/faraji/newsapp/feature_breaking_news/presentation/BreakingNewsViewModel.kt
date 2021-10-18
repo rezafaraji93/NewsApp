@@ -22,7 +22,7 @@ class BreakingNewsViewModel @Inject constructor(
     private val _state = mutableStateOf(BreakingNewsState())
     val state: State<BreakingNewsState> = _state
 
-    val news = useCase.getBreakingNewsUseCase.invoke()
+    val news = useCase.getBreakingNewsUseCase()
         .cachedIn(viewModelScope)
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -51,7 +51,6 @@ class BreakingNewsViewModel @Inject constructor(
                         )
                     )
                 }
-
             }
         }
     }
