@@ -5,6 +5,9 @@ import com.faraji.newsapp.core.domain.models.Article
 sealed class BreakingNewsEvent {
     object LoadMoreNews : BreakingNewsEvent()
     object LoadedPage : BreakingNewsEvent()
-    object OnError: BreakingNewsEvent()
+    object SlidedToUsNews: BreakingNewsEvent()
+    object SlidedToCaNews: BreakingNewsEvent()
+    object SlidedToDeNews: BreakingNewsEvent()
+    data class OnError(val message: String): BreakingNewsEvent()
     data class ClickedOnArticle(val article: Article) : BreakingNewsEvent()
 }

@@ -70,6 +70,10 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager-indicators:0.20.0"
     implementation "com.google.accompanist:accompanist-placeholder-material:0.20.0"
 
+    //Accompanist System Ui Controller
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.20.0"
+
+
     // Compose dependencies
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01"
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"

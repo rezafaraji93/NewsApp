@@ -3,9 +3,7 @@ package com.faraji.newsapp.feature_search_news.presentation
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -25,6 +23,7 @@ import com.faraji.newsapp.R
 import com.faraji.newsapp.core.presentation.components.ArticleItem
 import com.faraji.newsapp.core.presentation.components.CustomTextField
 import com.faraji.newsapp.core.presentation.ui.theme.SpaceSmall
+import com.faraji.newsapp.core.presentation.ui.theme.TextWhite
 import com.faraji.newsapp.core.util.UiEvent
 import com.faraji.newsapp.core.util.asString
 import kotlinx.coroutines.flow.collectLatest
@@ -94,8 +93,17 @@ fun SearchNewsScreen(
             Spacer(modifier = Modifier.height(SpaceSmall))
             LazyColumn {
                 searchedNews?.let {
-
-                    items(searchedNews) { article ->
+                    if (it.itemCount == 0) {
+                        item {
+                            Text(
+                                text = stringResource(id = R.string.no_articles),
+                                style = MaterialTheme.typography.h2.copy(
+                                    color = TextWhite
+                                )
+                            )
+                        }
+                    }
+                    items(it) { article ->
                         if (article != null) {
                             ArticleItem(
                                 article = article,

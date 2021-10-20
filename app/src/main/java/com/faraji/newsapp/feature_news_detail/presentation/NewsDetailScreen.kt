@@ -5,27 +5,22 @@ import android.graphics.Bitmap
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.faraji.newsapp.R
 import com.faraji.newsapp.core.util.UiEvent
 import com.faraji.newsapp.core.util.asString
@@ -57,8 +52,12 @@ fun NewsDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colors.background)
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 AndroidView(
                     factory = {
@@ -101,8 +100,7 @@ fun NewsDetailScreen(
                     if (state.value.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier
-                                .align(Alignment.Center),
-                            color = Color.Blue
+                                .align(Alignment.Center)
                         )
                     }
                     FloatingActionButton(
@@ -111,13 +109,13 @@ fun NewsDetailScreen(
                             .padding(end = 12.dp, bottom = 12.dp),
                         onClick = {
                             viewModel.onEvent(NewsDetailEvent.SaveArticle(article))
-
                         },
+                        backgroundColor = MaterialTheme.colors.primary
                     ) {
                         Icon(
                             imageVector = Icons.Default.Favorite,
                             contentDescription = stringResource(id = R.string.add_to_favorites),
-                            tint = Color.White
+                            tint = MaterialTheme.colors.onPrimary
                         )
                     }
                 }

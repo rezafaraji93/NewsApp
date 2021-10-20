@@ -30,7 +30,7 @@ fun CustomScaffold(
         ),
         BottomNavItem(
             route = Screen.SavedNewsScreen.route,
-            icon = Icons.Outlined.AddTask,
+            icon = Icons.Outlined.Save,
             text = stringResource(id = R.string.saved_news),
             contentDescription = "Saved Articles",
         ),

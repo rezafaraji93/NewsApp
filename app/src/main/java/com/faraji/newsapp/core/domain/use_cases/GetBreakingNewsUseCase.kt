@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 class GetBreakingNewsUseCase(
     private val repository: NewsRepository
 ) {
-    operator fun invoke(): Flow<PagingData<Article>> {
-        return repository.breakingNews
+    suspend operator fun invoke(countryCode: String, pageNumber: Int = 1): Flow<PagingData<Article>> {
+        return repository.getBreakingNews(countryCode, pageNumber)
     }
 }

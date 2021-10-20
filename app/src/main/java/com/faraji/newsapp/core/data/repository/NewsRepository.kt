@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
 
-    val breakingNews: Flow<PagingData<Article>>
+    suspend fun getBreakingNews(countryCode: String, pageNumber: Int): Flow<PagingData<Article>>
 
-    suspend fun searchForNews(query: String, pageNumber: Int = 1): Flow<PagingData<Article>>
+    suspend fun searchForNews(query: String, pageNumber: Int): Flow<PagingData<Article>>
 
     suspend fun addToFavorites(article: Article): Long
 

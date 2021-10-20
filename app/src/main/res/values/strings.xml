@@ -17,4 +17,6 @@
     <string name="breaking_news">Breaking news</string>
     <string name="saved_news">Saved</string>
     <string name="search">Search</string>
+    <string name="united_states_news">United States</string>
+    <string name="no_articles">No articles</string>
 </resources>

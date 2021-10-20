@@ -4,12 +4,12 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.faraji.newsapp.core.data.remote.NewsApi
 import com.faraji.newsapp.core.domain.models.Article
-import com.faraji.newsapp.core.domain.models.NewsResponse
 import okio.IOException
 import retrofit2.HttpException
 
-class BreakingNewsSource(
-    private val api: NewsApi
+class CanadaBreakingNewsSource(
+    private val api: NewsApi,
+    private val countryCode: String,
 ) : PagingSource<Int, Article>() {
 
     private var currentPage = 1
@@ -22,6 +22,7 @@ class BreakingNewsSource(
         return try {
             val nextPage = params.key ?: currentPage
             val news = api.getBreakingNews(
+                countryCode = countryCode,
                 pageNumber = nextPage
             ).body()?.articles
 

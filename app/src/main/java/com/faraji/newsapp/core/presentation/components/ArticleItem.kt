@@ -2,7 +2,7 @@ package com.faraji.newsapp.core.presentation.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +29,7 @@ import com.faraji.newsapp.core.domain.models.Article
 import com.faraji.newsapp.core.presentation.ui.theme.HintGray
 import com.faraji.newsapp.core.presentation.ui.theme.SpaceMedium
 import com.faraji.newsapp.core.presentation.ui.theme.SpaceSmall
+import com.faraji.newsapp.core.presentation.ui.theme.TextWhite
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.shimmer
@@ -40,7 +41,7 @@ fun ArticleItem(
     modifier: Modifier = Modifier,
     onArticleClick: () -> Unit,
     deleteButtonTextStyle: TextStyle = MaterialTheme.typography.body1.copy(
-        color = MaterialTheme.colors.onPrimary
+        color = TextWhite
     ),
     showDeleteButton: Boolean = false,
     onArticleDeletePressed: () -> Unit = {}
@@ -121,8 +122,12 @@ fun ArticleItem(
                 OutlinedButton(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colors.primary),
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colors.primary,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .clip(RoundedCornerShape(10.dp)),
                     onClick = { onArticleDeletePressed() },
                 ) {
                     Icon(
