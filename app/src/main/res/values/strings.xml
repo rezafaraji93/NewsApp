@@ -11,4 +11,10 @@
     <string name="deleted_from_saved">Article deleted from favorites</string>
     <string name="no_news_found">No news found!</string>
     <string name="news_image">News image</string>
+    <string name="remove_article">Remove article</string>
+    <string name="remove_article_icon">Remove article icon</string>
+    <string name="trailing_search_icon">Trailing search icon</string>
+    <string name="breaking_news">Breaking news</string>
+    <string name="saved_news">Saved</string>
+    <string name="search">Search</string>
 </resources>

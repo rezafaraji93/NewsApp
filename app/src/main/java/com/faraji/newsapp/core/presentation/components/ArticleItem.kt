@@ -2,13 +2,13 @@ package com.faraji.newsapp.core.presentation.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,9 @@ fun ArticleItem(
     article: Article,
     modifier: Modifier = Modifier,
     onArticleClick: () -> Unit,
+    deleteButtonTextStyle: TextStyle = MaterialTheme.typography.body1.copy(
+        color = MaterialTheme.colors.onPrimary
+    ),
     showDeleteButton: Boolean = false,
     onArticleDeletePressed: () -> Unit = {}
 ) {
@@ -46,11 +50,7 @@ fun ArticleItem(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .combinedClickable(
-                onClick = onArticleClick,
-                onLongClick = onArticleDeletePressed,
-            )
-
+            .clickable { onArticleClick() }
     ) {
         Column(
             modifier = Modifier
@@ -78,7 +78,6 @@ fun ArticleItem(
                     }
                 ),
                 contentDescription = stringResource(id = R.string.news_image)
-
             )
             Spacer(modifier = Modifier.height(SpaceSmall))
             Row(
@@ -119,13 +118,24 @@ fun ArticleItem(
             )
             Spacer(modifier = Modifier.height(SpaceSmall))
             if (showDeleteButton) {
-                Button(onClick = {
-                    onArticleDeletePressed()
-                }) {
-
+                OutlinedButton(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colors.primary),
+                    onClick = { onArticleDeletePressed() },
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = stringResource(id = R.string.remove_article_icon)
+                    )
+                    Spacer(modifier = Modifier.width(SpaceMedium))
+                    Text(
+                        text = stringResource(id = R.string.remove_article),
+                        style = deleteButtonTextStyle
+                    )
                 }
             }
         }
     }
-
 }

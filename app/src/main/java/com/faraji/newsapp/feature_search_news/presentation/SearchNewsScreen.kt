@@ -8,11 +8,12 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,10 +27,9 @@ import com.faraji.newsapp.core.presentation.components.CustomTextField
 import com.faraji.newsapp.core.presentation.ui.theme.SpaceSmall
 import com.faraji.newsapp.core.util.UiEvent
 import com.faraji.newsapp.core.util.asString
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
+@ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
 fun SearchNewsScreen(
@@ -42,7 +42,7 @@ fun SearchNewsScreen(
     val state = viewModel.state.value
     val searchedNews = viewModel.searchedNews?.collectAsLazyPagingItems()
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -55,6 +55,7 @@ fun SearchNewsScreen(
                 is UiEvent.Navigate -> {
                     navController.navigate(event.route)
                 }
+                UiEvent.NavigateUp -> TODO()
             }
         }
     }
@@ -78,11 +79,17 @@ fun SearchNewsScreen(
                 text = searchFieldState.text,
                 hint = stringResource(id = R.string.search_news_query),
                 onValueChanged = {
-                    scope.launch {
-                        delay(2000)
-                        viewModel.onEvent(SearchNewsEvent.EnteredQuery(it))
-                    }
-                }
+                    viewModel.onEvent(SearchNewsEvent.EnteredQuery(it))
+                },
+                isSearchScreen = true,
+                onSearchTrailingIconClicked = {
+                    keyboardController?.hide()
+                    viewModel.onEvent(SearchNewsEvent.SearchForNews(searchFieldState.text))
+                },
+                onSearchAction = {
+                    keyboardController?.hide()
+                    viewModel.onEvent(SearchNewsEvent.SearchForNews(searchFieldState.text))
+                },
             )
             Spacer(modifier = Modifier.height(SpaceSmall))
             LazyColumn {

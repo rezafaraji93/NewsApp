@@ -60,6 +60,7 @@ class SavedNewsViewModel @Inject constructor(
             is SavedNewsEvent.DeleteArticle -> {
                 viewModelScope.launch {
                     useCases.deleteSavedArticleUseCase.invoke(event.article)
+                    getNews()
                     _eventFlow.emit(
                         UiEvent.ShowSnackbar(
                             UiText.StringResource(R.string.deleted_from_saved)

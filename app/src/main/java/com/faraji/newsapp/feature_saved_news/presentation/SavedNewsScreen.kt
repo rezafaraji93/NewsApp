@@ -58,6 +58,7 @@ fun SavedNewsScreen(
                         onArticleClick = {
                             viewModel.onEvent(SavedNewsEvent.OnArticleClick(it))
                         },
+                        showDeleteButton = true,
                         onArticleDeletePressed = {
                             viewModel.onEvent(SavedNewsEvent.DeleteArticle(it))
                         }

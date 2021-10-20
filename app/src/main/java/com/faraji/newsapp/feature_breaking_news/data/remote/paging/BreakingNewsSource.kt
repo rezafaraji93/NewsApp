@@ -26,9 +26,9 @@ class BreakingNewsSource(
             ).body()?.articles
 
             LoadResult.Page(
-                data = news!!,
+                data = news ?: emptyList(),
                 prevKey = if (nextPage == 1) null else nextPage - 1,
-                nextKey = if (news.isEmpty()) null else currentPage + 1
+                nextKey = if (news == null) null else currentPage + 1
 
             ).also {
                 currentPage++

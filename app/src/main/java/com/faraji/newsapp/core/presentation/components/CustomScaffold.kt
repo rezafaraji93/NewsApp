@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.faraji.newsapp.R
 import com.faraji.newsapp.core.domain.models.BottomNavItem
 import com.faraji.newsapp.core.util.Screen
 
@@ -24,16 +25,19 @@ fun CustomScaffold(
         BottomNavItem(
             route = Screen.BreakingNewsScreen.route,
             icon = Icons.Outlined.Article,
+            text = stringResource(id = R.string.breaking_news),
             contentDescription = "Article",
         ),
         BottomNavItem(
             route = Screen.SavedNewsScreen.route,
-            icon = Icons.Outlined.Save,
+            icon = Icons.Outlined.AddTask,
+            text = stringResource(id = R.string.saved_news),
             contentDescription = "Saved Articles",
         ),
         BottomNavItem(
             route = Screen.SearchNewsScreen.route,
-            icon = Icons.Outlined.Search,
+            icon = Icons.Outlined.Looks,
+            text = stringResource(id = R.string.search),
             contentDescription = "Search news",
         )
     ),
@@ -53,6 +57,7 @@ fun CustomScaffold(
                         bottomNavItems.forEach { bottomNavItems ->
                             CustomBottomNavItem(
                                 icon = bottomNavItems.icon,
+                                text = bottomNavItems.text,
                                 contentDescription = bottomNavItems.contentDescription,
                                 selected = bottomNavItems.route == navController.currentDestination?.route,
                                 enabled = bottomNavItems.icon != null

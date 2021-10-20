@@ -3,6 +3,7 @@ package com.faraji.newsapp.core.presentation.components
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -16,6 +17,7 @@ import com.faraji.newsapp.feature_search_news.presentation.SearchNewsScreen
 import com.faraji.newsapp.feature_splash_screen.presentation.SplashScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
+@ExperimentalComposeUiApi
 @ExperimentalPagerApi
 @ExperimentalFoundationApi
 @Composable

@@ -39,8 +39,10 @@ class SearchNewsViewModel @Inject constructor(
         when (event) {
             is SearchNewsEvent.EnteredQuery -> {
                 _searchTextFieldState.value = _searchTextFieldState.value.copy(
-                    text = event.query
+                    text = event.fieldText
                 )
+            }
+            is SearchNewsEvent.SearchForNews -> {
                 _state.value = _state.value.copy(
                     isLoading = true
                 )
@@ -48,7 +50,6 @@ class SearchNewsViewModel @Inject constructor(
                     searchedNews =
                         useCase.searchNewsUseCase.invoke(event.query).cachedIn(viewModelScope)
                 }
-
             }
             is SearchNewsEvent.OnArticleClicked -> {
                 viewModelScope.launch {

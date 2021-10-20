@@ -11,6 +11,6 @@ object Constants {
 
     const val SPLASH_SCREEN_DURATION = 2000L
 
-    const val API_KEY = "e0b2c1835a75436ea331c0da64d91033"
+    const val API_KEY = "a17abb28fc654f00b9cf9f3aa612b0b4"
     const val BASE_URL = "https://newsapi.org/"
 }

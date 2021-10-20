@@ -2,14 +2,11 @@ package com.faraji.newsapp.core.presentation.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.faraji.newsapp.core.presentation.ui.theme.HintGray
 import com.faraji.newsapp.core.presentation.ui.theme.SpaceSmall
 
@@ -26,6 +24,7 @@ import com.faraji.newsapp.core.presentation.ui.theme.SpaceSmall
 fun RowScope.CustomBottomNavItem(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
+    text: String? = null,
     contentDescription: String? = null,
     selected: Boolean = false,
     selectedColor: Color = MaterialTheme.colors.primary,
@@ -70,14 +69,29 @@ fun RowScope.CustomBottomNavItem(
                             )
                     }
             ) {
-                if (icon != null) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = contentDescription,
-                        modifier = Modifier.align(Alignment.Center),
-                        tint = if (selected) selectedColor else unselectedColor
-
-                    )
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(bottom = 5.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    if (icon != null) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = contentDescription,
+                            tint = if (selected) selectedColor else unselectedColor
+                        )
+                    }
+                    if (text != null) {
+                        Text(
+                            text = text,
+                            style = MaterialTheme.typography.body1.copy(
+                                color = if (selected) selectedColor else unselectedColor,
+                                fontSize = 10.sp
+                            )
+                        )
+                    }
                 }
             }
         }
