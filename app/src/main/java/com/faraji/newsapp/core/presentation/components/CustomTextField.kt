@@ -10,10 +10,14 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import com.faraji.newsapp.core.presentation.ui.theme.HintGray
 import com.faraji.newsapp.core.presentation.ui.theme.IconSizeMedium
+import com.faraji.newsapp.core.presentation.ui.theme.TextGray
 
 @Composable
 fun CustomTextField(
@@ -24,6 +28,7 @@ fun CustomTextField(
     textStyle: TextStyle = TextStyle(
         color = MaterialTheme.colors.onBackground
     ),
+    hintColor: Color = TextGray,
     singleLine: Boolean = true,
     maxLines: Int = 1,
     leadingIcon: ImageVector? = null,
@@ -45,13 +50,16 @@ fun CustomTextField(
             placeholder = {
                 Text(
                     text = hint,
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.body1.copy(
+                        color = hintColor
+                    )
                 )
             },
             modifier = modifier
                 .fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
+                imeAction = ImeAction.Search
             ),
             singleLine = singleLine,
             leadingIcon = if (leadingIcon != null) {

@@ -2,6 +2,7 @@ package com.faraji.newsapp.core.presentation.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.faraji.newsapp.core.presentation.ui.theme.HintGray
 import com.faraji.newsapp.core.presentation.ui.theme.SpaceSmall
 
 @Composable
@@ -26,11 +28,12 @@ fun RowScope.CustomBottomNavItem(
     icon: ImageVector? = null,
     contentDescription: String? = null,
     selected: Boolean = false,
-    selectedColor: Color = Color.White,
-    unselectedColor: Color = Color.Red,
+    selectedColor: Color = MaterialTheme.colors.primary,
+    unselectedColor: Color = HintGray,
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
+
     val lineLength = animateFloatAsState(
         targetValue = if (selected) 1f else 0f,
         animationSpec = tween(
@@ -71,7 +74,9 @@ fun RowScope.CustomBottomNavItem(
                     Icon(
                         imageVector = icon,
                         contentDescription = contentDescription,
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.Center),
+                        tint = if (selected) selectedColor else unselectedColor
+
                     )
                 }
             }

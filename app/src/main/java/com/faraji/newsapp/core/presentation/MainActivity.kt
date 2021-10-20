@@ -16,11 +16,13 @@ import com.faraji.newsapp.core.presentation.components.CustomScaffold
 import com.faraji.newsapp.core.presentation.components.Navigation
 import com.faraji.newsapp.core.presentation.ui.theme.NewsAppTheme
 import com.faraji.newsapp.core.util.Screen
+import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @ExperimentalFoundationApi
+    @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -28,12 +30,12 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     color = MaterialTheme.colors.background,
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val scaffoldState = rememberScaffoldState()
+
                     CustomScaffold(
                         navController = navController,
                         showBottomBar = navBackStackEntry?.destination?.route in listOf(

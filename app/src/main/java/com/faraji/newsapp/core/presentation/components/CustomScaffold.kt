@@ -1,13 +1,14 @@
 package com.faraji.newsapp.core.presentation.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Article
-import androidx.compose.material.icons.outlined.Save
-import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.faraji.newsapp.core.domain.models.BottomNavItem
@@ -23,18 +24,18 @@ fun CustomScaffold(
         BottomNavItem(
             route = Screen.BreakingNewsScreen.route,
             icon = Icons.Outlined.Article,
-            contentDescription = "Breaking News"
+            contentDescription = "Article",
         ),
         BottomNavItem(
             route = Screen.SavedNewsScreen.route,
             icon = Icons.Outlined.Save,
-            contentDescription = "Breaking News"
+            contentDescription = "Saved Articles",
         ),
         BottomNavItem(
             route = Screen.SearchNewsScreen.route,
             icon = Icons.Outlined.Search,
-            contentDescription = "Breaking News"
-        ),
+            contentDescription = "Search news",
+        )
     ),
     content: @Composable () -> Unit
 ) {
@@ -44,20 +45,20 @@ fun CustomScaffold(
                 BottomAppBar(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    backgroundColor = MaterialTheme.colors.primary,
+                    backgroundColor = MaterialTheme.colors.surface,
+                    cutoutShape = CircleShape,
                     elevation = 5.dp
                 ) {
                     BottomNavigation {
-                        bottomNavItems.forEach { bottomNavItem ->
+                        bottomNavItems.forEach { bottomNavItems ->
                             CustomBottomNavItem(
-                                icon = bottomNavItem.icon,
-                                contentDescription = bottomNavItem.contentDescription,
-                                selected = bottomNavItem.route == navController.currentDestination?.route,
-                                enabled = bottomNavItem.icon != null
+                                icon = bottomNavItems.icon,
+                                contentDescription = bottomNavItems.contentDescription,
+                                selected = bottomNavItems.route == navController.currentDestination?.route,
+                                enabled = bottomNavItems.icon != null
                             ) {
-                                if (navController.currentDestination?.route != bottomNavItem.route)
-                                    navController.navigate(bottomNavItem.route)
-
+                                if (navController.currentDestination?.route != bottomNavItems.route)
+                                    navController.navigate(bottomNavItems.route)
                             }
                         }
                     }

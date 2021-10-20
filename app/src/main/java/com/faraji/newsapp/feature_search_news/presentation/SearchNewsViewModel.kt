@@ -4,15 +4,16 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.faraji.newsapp.R
-import com.faraji.newsapp.core.domain.response.Resource
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.faraji.newsapp.core.domain.models.Article
 import com.faraji.newsapp.core.domain.use_cases.UseCases
 import com.faraji.newsapp.core.presentation.components.CustomTextFieldState
 import com.faraji.newsapp.core.util.Screen
 import com.faraji.newsapp.core.util.UiEvent
 import com.faraji.newsapp.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -32,13 +33,22 @@ class SearchNewsViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    var searchedNews: Flow<PagingData<Article>>? = null
+
     fun onEvent(event: SearchNewsEvent) {
         when (event) {
             is SearchNewsEvent.EnteredQuery -> {
-                _searchTextFieldState.value = searchTextFieldState.value.copy(
+                _searchTextFieldState.value = _searchTextFieldState.value.copy(
                     text = event.query
                 )
-                getNewsForQuery(event.query)
+                _state.value = _state.value.copy(
+                    isLoading = true
+                )
+                viewModelScope.launch {
+                    searchedNews =
+                        useCase.searchNewsUseCase.invoke(event.query).cachedIn(viewModelScope)
+                }
+
             }
             is SearchNewsEvent.OnArticleClicked -> {
                 viewModelScope.launch {
@@ -49,40 +59,24 @@ class SearchNewsViewModel @Inject constructor(
                                     "&imageUrl=${event.article.urlToImage}&publishedAt=${event.article.publishedAt}"
                         )
                     )
-
                 }
             }
-        }
-    }
-
-    private fun getNewsForQuery(query: String) {
-        viewModelScope.launch {
-            delay(2000L)
-            _state.value = state.value.copy(
-                isLoading = true
-            )
-            when (val result =
-                useCase.searchNewsUseCase.invoke(query, 1)) {
-                is Resource.Success -> {
-                    if (result.data?.articles.isNullOrEmpty()) {
-                        _eventFlow.emit(
-                            UiEvent.ShowSnackbar(
-                                UiText.StringResource(R.string.no_news_found)
-                            )
-                        )
-                    }
-                    _state.value = state.value.copy(
-                        news = result.data?.articles,
-                        isLoading = false
-                    )
-                }
-                is Resource.Error -> {
-                    _state.value = state.value.copy(
-                        isLoading = false
-                    )
+            is SearchNewsEvent.LoadMoreNews -> {
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    isLoadingNewNews = false
+                )
+            }
+            is SearchNewsEvent.LoadedPage -> {
+                _state.value = _state.value.copy(
+                    isLoading = false
+                )
+            }
+            is SearchNewsEvent.OnError -> {
+                viewModelScope.launch {
                     _eventFlow.emit(
                         UiEvent.ShowSnackbar(
-                            UiText.StringResource(R.string.no_news_found)
+                            UiText.unknownError()
                         )
                     )
                 }

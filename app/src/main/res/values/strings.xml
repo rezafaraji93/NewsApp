@@ -10,4 +10,5 @@
     <string name="article_saved_successfully">Article saved successfully</string>
     <string name="deleted_from_saved">Article deleted from favorites</string>
     <string name="no_news_found">No news found!</string>
+    <string name="news_image">News image</string>
 </resources>

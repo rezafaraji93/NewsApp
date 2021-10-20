@@ -11,10 +11,12 @@ import androidx.navigation.navArgument
 import com.faraji.newsapp.core.util.Screen
 import com.faraji.newsapp.feature_breaking_news.presentation.BreakingNewsScreen
 import com.faraji.newsapp.feature_news_detail.presentation.NewsDetailScreen
-import com.faraji.newsapp.feature_saved_news.presentation.SavedNews
-import com.faraji.newsapp.feature_search_news.presentation.SearchNews
+import com.faraji.newsapp.feature_saved_news.presentation.SavedNewsScreen
+import com.faraji.newsapp.feature_search_news.presentation.SearchNewsScreen
 import com.faraji.newsapp.feature_splash_screen.presentation.SplashScreen
+import com.google.accompanist.pager.ExperimentalPagerApi
 
+@ExperimentalPagerApi
 @ExperimentalFoundationApi
 @Composable
 fun Navigation(
@@ -35,13 +37,13 @@ fun Navigation(
             )
         }
         composable(Screen.SavedNewsScreen.route) {
-            SavedNews(
+            SavedNewsScreen(
                 navController = navController,
                 scaffoldState = scaffoldState
             )
         }
         composable(Screen.SearchNewsScreen.route) {
-            SearchNews(
+            SearchNewsScreen(
                 navController = navController,
                 scaffoldState = scaffoldState
             )

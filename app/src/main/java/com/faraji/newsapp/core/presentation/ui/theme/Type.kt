@@ -8,32 +8,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.faraji.newsapp.R
 
-val roboto = FontFamily(
-    Font(R.font.roboto_bold, FontWeight.Bold),
-    Font(R.font.roboto_light, FontWeight.Light),
-    Font(R.font.roboto_medium, FontWeight.Medium),
-    Font(R.font.roboto_regular, FontWeight.Normal)
+val urbanist = FontFamily(
+    Font(R.font.urbanist_bold, FontWeight.Bold),
+    Font(R.font.urbanist_meduim, FontWeight.Medium),
+    Font(R.font.urbanist_regular, FontWeight.Normal)
 )
 
 // Set of Material typography styles to start with
 val Typography = Typography(
     body1 = TextStyle(
-        fontFamily = roboto,
+        fontFamily = urbanist,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     h1 = TextStyle(
-        fontFamily = roboto,
+        fontFamily = urbanist,
         fontWeight = FontWeight.Bold,
         fontSize = 30.sp
     ),
     h2 = TextStyle(
-        fontFamily = roboto,
+        fontFamily = urbanist,
         fontWeight = FontWeight.Medium,
         fontSize = 24.sp,
     ),
     body2 = TextStyle(
-        fontFamily = roboto,
+        fontFamily = urbanist,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
     )

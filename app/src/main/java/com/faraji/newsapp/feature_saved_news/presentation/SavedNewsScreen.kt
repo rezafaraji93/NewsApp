@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @ExperimentalFoundationApi
 @Composable
-fun SavedNews(
+fun SavedNewsScreen(
     navController: NavController,
     scaffoldState: ScaffoldState,
     viewModel: SavedNewsViewModel = hiltViewModel()
@@ -58,7 +58,7 @@ fun SavedNews(
                         onArticleClick = {
                             viewModel.onEvent(SavedNewsEvent.OnArticleClick(it))
                         },
-                        onArticleLongPress = {
+                        onArticleDeletePressed = {
                             viewModel.onEvent(SavedNewsEvent.DeleteArticle(it))
                         }
                     )

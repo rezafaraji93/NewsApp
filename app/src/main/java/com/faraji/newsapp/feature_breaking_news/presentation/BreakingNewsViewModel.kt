@@ -31,12 +31,12 @@ class BreakingNewsViewModel @Inject constructor(
     fun onEvent(event: BreakingNewsEvent) {
         when (event) {
             is BreakingNewsEvent.LoadMoreNews -> {
-                _state.value = state.value.copy(
+                _state.value = _state.value.copy(
                     isLoadingNewNews = true
                 )
             }
             is BreakingNewsEvent.LoadedPage -> {
-                _state.value = state.value.copy(
+                _state.value = _state.value.copy(
                     isLoadingNewNews = false,
                     isLoadingFirstTime = false
                 )
