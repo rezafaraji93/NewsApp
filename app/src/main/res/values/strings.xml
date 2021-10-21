@@ -4,7 +4,7 @@
     <string name="unknownError">Unknown error!</string>
     <string name="password_visible_content_description">Password visible</string>
     <string name="password_invisible_content_description">passwordInvisible</string>
-    <string name="search_news_query">Search for news</string>
+    <string name="search_news_query">Search</string>
     <string name="unkown_error">Unknown error occurred</string>
     <string name="add_to_favorites">Add to favorites</string>
     <string name="article_saved_successfully">Article saved successfully</string>
@@ -19,4 +19,6 @@
     <string name="search">Search</string>
     <string name="united_states_news">United States</string>
     <string name="no_articles">No articles</string>
+    <string name="search_for_news">Search for any news</string>
+    <string name="search_textfield_error">Please enter a query to search</string>
 </resources>

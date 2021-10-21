@@ -3,11 +3,13 @@ package com.faraji.newsapp.feature_news_detail.presentation
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.view.ViewGroup
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -52,75 +54,79 @@ fun NewsDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colors.background),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                AndroidView(
-                    factory = {
-                        WebView(it).apply {
-                            layoutParams = ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.MATCH_PARENT
-                            )
-                            val webClient = object : WebViewClient() {
-                                override fun onPageStarted(
-                                    view: WebView?,
-                                    url: String?,
-                                    favicon: Bitmap?
-                                ) {
-                                    super.onPageStarted(view, url, favicon)
-                                    viewModel.onEvent(NewsDetailEvent.OnProgressChanged(true))
-                                }
-
-                                override fun onPageFinished(view: WebView?, url: String?) {
-                                    super.onPageFinished(view, url)
-                                    viewModel.onEvent(NewsDetailEvent.OnProgressChanged(false))
-                                }
-                            }
-                            webViewClient = webClient
-
-                            settings.apply {
-                                javaScriptEnabled = true
-                                setSupportZoom(true)
-                                javaScriptCanOpenWindowsAutomatically = true
-                                domStorageEnabled = true
-                            }
-                            state.value.newsUrl?.let { url ->
-                                loadUrl(url)
+        Box(modifier = Modifier.fillMaxSize()) {
+            AndroidView(
+                factory = {
+                    WebView(it).apply {
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                        val chromeClient = object : WebChromeClient() {
+                            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                                super.onProgressChanged(view, newProgress)
+                                viewModel.onEvent(NewsDetailEvent.OnProgressChanged(newProgress.toFloat() / 100))
                             }
                         }
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
-                Box(modifier = Modifier.fillMaxSize()) {
-                    if (state.value.isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                        )
+                        val webClient = object : WebViewClient() {
+                            override fun onPageStarted(
+                                view: WebView?,
+                                url: String?,
+                                favicon: Bitmap?
+                            ) {
+                                super.onPageStarted(view, url, favicon)
+                                viewModel.onEvent(NewsDetailEvent.isLoading(true))
+                            }
+
+                            override fun onPageFinished(view: WebView?, url: String?) {
+                                super.onPageFinished(view, url)
+                                viewModel.onEvent(NewsDetailEvent.isLoading(false))
+                            }
+                        }
+                        webViewClient = webClient
+                        webChromeClient = chromeClient
+
+                        settings.apply {
+                            javaScriptEnabled = true
+                            setSupportZoom(true)
+                            javaScriptCanOpenWindowsAutomatically = true
+                            domStorageEnabled = true
+                        }
+                        state.value.newsUrl?.let { url ->
+                            loadUrl(url)
+                        }
                     }
-                    FloatingActionButton(
+                },
+                modifier = Modifier.fillMaxSize()
+            )
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (state.value.isLoading) {
+                    LinearProgressIndicator(
                         modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(end = 12.dp, bottom = 12.dp),
-                        onClick = {
-                            viewModel.onEvent(NewsDetailEvent.SaveArticle(article))
-                        },
-                        backgroundColor = MaterialTheme.colors.primary
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Favorite,
-                            contentDescription = stringResource(id = R.string.add_to_favorites),
-                            tint = MaterialTheme.colors.onPrimary
-                        )
-                    }
+                            .fillMaxWidth()
+                            .align(Alignment.TopStart),
+                        progress = state.value.progress
+                    )
+                }
+                FloatingActionButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 12.dp, bottom = 12.dp),
+                    onClick = {
+                        viewModel.onEvent(NewsDetailEvent.SaveArticle(article))
+                    },
+                    backgroundColor = MaterialTheme.colors.primary
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = stringResource(id = R.string.add_to_favorites),
+                        tint = MaterialTheme.colors.onPrimary
+                    )
                 }
             }
         }
-
     }
 }

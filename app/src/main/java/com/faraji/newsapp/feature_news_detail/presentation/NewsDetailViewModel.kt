@@ -30,43 +30,43 @@ class NewsDetailViewModel @Inject constructor(
     init {
         savedStateHandle.apply {
             get<String>("source")?.let { source ->
-                _webPageState.value = webPageState.value.copy(
+                _webPageState.value = _webPageState.value.copy(
                     source = source
                 )
             }
 
             get<String>("author")?.let { author ->
-                _webPageState.value = webPageState.value.copy(
+                _webPageState.value = _webPageState.value.copy(
                     author = author
                 )
             }
 
             get<String>("title")?.let { title ->
-                _webPageState.value = webPageState.value.copy(
+                _webPageState.value = _webPageState.value.copy(
                     title = title
                 )
             }
 
             get<String>("description")?.let { description ->
-                _webPageState.value = webPageState.value.copy(
+                _webPageState.value = _webPageState.value.copy(
                     description = description
                 )
             }
 
             get<String>("newsUrl")?.let { url ->
-                _webPageState.value = webPageState.value.copy(
+                _webPageState.value = _webPageState.value.copy(
                     newsUrl = url
                 )
             }
 
             get<String>("imageUrl")?.let { imageUrl ->
-                _webPageState.value = webPageState.value.copy(
+                _webPageState.value = _webPageState.value.copy(
                     imageUrl = imageUrl
                 )
             }
 
             get<String>("publishedAt")?.let { publishedAt ->
-                _webPageState.value = webPageState.value.copy(
+                _webPageState.value = _webPageState.value.copy(
                     publishedAt = publishedAt
                 )
             }
@@ -85,11 +85,10 @@ class NewsDetailViewModel @Inject constructor(
                         )
                     )
                 }
-
             }
             is NewsDetailEvent.OnProgressChanged -> {
-                _webPageState.value = webPageState.value.copy(
-                    isLoading = event.isLoading
+                _webPageState.value = _webPageState.value.copy(
+                    progress = event.progress
                 )
             }
         }

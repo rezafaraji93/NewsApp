@@ -6,8 +6,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment.Companion.BottomCenter
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,6 +29,7 @@ import com.faraji.newsapp.core.presentation.ui.theme.TextWhite
 import com.faraji.newsapp.core.util.UiEvent
 import com.faraji.newsapp.core.util.asString
 import kotlinx.coroutines.flow.collectLatest
+import timber.log.Timber
 
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
@@ -42,6 +45,9 @@ fun SearchNewsScreen(
     val searchedNews = viewModel.searchedNews?.collectAsLazyPagingItems()
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val isEmptyResult = remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -54,7 +60,6 @@ fun SearchNewsScreen(
                 is UiEvent.Navigate -> {
                     navController.navigate(event.route)
                 }
-                UiEvent.NavigateUp -> TODO()
             }
         }
     }
@@ -63,83 +68,103 @@ fun SearchNewsScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = 56.dp),
+        contentAlignment = Center
     ) {
-        if (state.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+        if (searchFieldState.text.isBlank()) {
+            IfSearchFieldIsEmpty()
         }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(SpaceSmall)
+        if (state.isLoading) {
+            CircularProgressIndicator()
+        }
+        if (isEmptyResult.value) {
+            NoNewsFound()
+        }
+        if (state.isLoadingNewNews) {
+            CircularProgressIndicator(modifier = Modifier.align(BottomCenter))
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(SpaceSmall)
+    ) {
+        CustomTextField(
+            text = searchFieldState.text,
+            hint = stringResource(id = R.string.search_news_query),
+            onValueChanged = {
+                viewModel.onEvent(SearchNewsEvent.EnteredQuery(it))
+            },
+            isSearchScreen = true,
+            onSearchTrailingIconClicked = {
+                keyboardController?.hide()
+                Timber.e(searchFieldState.text)
+                viewModel.onEvent(SearchNewsEvent.SearchForNews(searchFieldState.text))
+            },
+            onSearchAction = {
+                keyboardController?.hide()
+                Timber.e(searchFieldState.text)
+                viewModel.onEvent(SearchNewsEvent.SearchForNews(searchFieldState.text))
+            },
+        )
+        Spacer(modifier = Modifier.height(SpaceSmall))
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center
         ) {
-            CustomTextField(
-                text = searchFieldState.text,
-                hint = stringResource(id = R.string.search_news_query),
-                onValueChanged = {
-                    viewModel.onEvent(SearchNewsEvent.EnteredQuery(it))
-                },
-                isSearchScreen = true,
-                onSearchTrailingIconClicked = {
-                    keyboardController?.hide()
-                    viewModel.onEvent(SearchNewsEvent.SearchForNews(searchFieldState.text))
-                },
-                onSearchAction = {
-                    keyboardController?.hide()
-                    viewModel.onEvent(SearchNewsEvent.SearchForNews(searchFieldState.text))
-                },
-            )
-            Spacer(modifier = Modifier.height(SpaceSmall))
-            LazyColumn {
-                searchedNews?.let {
-                    if (it.itemCount == 0) {
-                        item {
-                            Text(
-                                text = stringResource(id = R.string.no_articles),
-                                style = MaterialTheme.typography.h2.copy(
-                                    color = TextWhite
-                                )
-                            )
-                        }
-                    }
-                    items(it) { article ->
-                        if (article != null) {
-                            ArticleItem(
-                                article = article,
-                                onArticleClick = {
-                                    viewModel.onEvent(SearchNewsEvent.OnArticleClicked(article))
-                                }
-                            )
-                        }
+            searchedNews?.let {
+                items(it) { article ->
+                    if (article != null) {
+                        ArticleItem(
+                            article = article,
+                            onArticleClick = {
+                                viewModel.onEvent(SearchNewsEvent.OnArticleClicked(article))
+                            }
+                        )
                         Divider()
                     }
-                    item {
-                        if (state.isLoadingNewNews) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.align(CenterHorizontally)
-                            )
-                        }
+                    if (it.itemCount == 0) {
+                        isEmptyResult.value = true
                     }
-                    searchedNews.apply {
-                        when {
-                            loadState.refresh is LoadState.Loading -> {
-                                viewModel.onEvent(SearchNewsEvent.LoadedPage)
-                            }
-                            loadState.append is LoadState.Loading -> {
-                                viewModel.onEvent(SearchNewsEvent.LoadMoreNews)
-                            }
-                            loadState.append is LoadState.NotLoading -> {
-                                viewModel.onEvent(SearchNewsEvent.LoadedPage)
-                            }
-                            loadState.append is LoadState.Error -> {
-                                viewModel.onEvent(SearchNewsEvent.OnError)
-                            }
+                }
+                searchedNews.apply {
+                    when {
+                        loadState.refresh is LoadState.Loading -> {
+                            viewModel.onEvent(SearchNewsEvent.LoadedPage)
+                        }
+                        loadState.append is LoadState.Loading -> {
+                            viewModel.onEvent(SearchNewsEvent.LoadMoreNews)
+                        }
+                        loadState.append is LoadState.NotLoading -> {
+                            viewModel.onEvent(SearchNewsEvent.LoadedPage)
+                        }
+                        loadState.append is LoadState.Error -> {
+                            viewModel.onEvent(SearchNewsEvent.OnError)
                         }
                     }
                 }
             }
-
         }
     }
+}
+
+@Composable
+fun IfSearchFieldIsEmpty(modifier: Modifier = Modifier) {
+    Text(
+        text = stringResource(id = R.string.search_for_news),
+        style = MaterialTheme.typography.h1.copy(
+            color = MaterialTheme.colors.primary
+        ),
+        modifier = modifier
+    )
+}
+
+@Composable
+fun NoNewsFound() {
+    Text(
+        text = stringResource(id = R.string.no_articles),
+        style = MaterialTheme.typography.h2.copy(
+            color = TextWhite
+        )
+    )
 }

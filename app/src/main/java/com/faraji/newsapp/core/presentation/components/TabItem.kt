@@ -31,7 +31,7 @@ sealed class TabItem(var title: String, var screen: ComposableFun) {
         val scaffoldState: ScaffoldState
     ) :
         TabItem(
-            "United States",
+            "Canada",
             {
                 CanadaBreakingNewsSlide(
                     navController = navController,
@@ -45,7 +45,7 @@ sealed class TabItem(var title: String, var screen: ComposableFun) {
         val scaffoldState: ScaffoldState
     ) :
         TabItem(
-            "United States",
+            "Germany",
             {
                 GermanyBreakingNewsSlide(
                     navController = navController,

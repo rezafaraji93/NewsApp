@@ -73,6 +73,9 @@ dependencies {
     //Accompanist System Ui Controller
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.20.0"
 
+    //Accompanist Swipe to refresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.20.0"
+
 
     // Compose dependencies
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01"

@@ -11,7 +11,8 @@ data class NewsDetailState(
     val newsUrl: String? = null,
     val imageUrl: String? = null,
     val publishedAt: String? = null,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val progress: Float = 0f
 ) {
     fun toArticle(): Article {
         return Article(

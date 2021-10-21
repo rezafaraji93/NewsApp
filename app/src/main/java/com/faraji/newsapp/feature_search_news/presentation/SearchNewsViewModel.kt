@@ -4,8 +4,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.faraji.newsapp.R
 import com.faraji.newsapp.core.domain.models.Article
 import com.faraji.newsapp.core.domain.use_cases.UseCases
 import com.faraji.newsapp.core.presentation.components.CustomTextFieldState
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,13 +46,7 @@ class SearchNewsViewModel @Inject constructor(
                 )
             }
             is SearchNewsEvent.SearchForNews -> {
-                _state.value = _state.value.copy(
-                    isLoading = true
-                )
-                viewModelScope.launch {
-                    searchedNews =
-                        useCase.searchNewsUseCase.invoke(event.query).cachedIn(viewModelScope)
-                }
+                searchForNews(event.query)
             }
             is SearchNewsEvent.OnArticleClicked -> {
                 viewModelScope.launch {
@@ -81,6 +78,27 @@ class SearchNewsViewModel @Inject constructor(
                         )
                     )
                 }
+            }
+        }
+    }
+
+    private fun searchForNews(query: String) {
+        if (query != ""){
+            _state.value = _state.value.copy(
+                isLoading = true,
+                query = query
+            )
+            viewModelScope.launch {
+                searchedNews =
+                    useCase.searchNewsUseCase.invoke(query).cachedIn(viewModelScope)
+            }
+        } else {
+            viewModelScope.launch {
+                _eventFlow.emit(
+                    UiEvent.ShowSnackbar(
+                        UiText.StringResource(R.string.search_textfield_error)
+                    )
+                )
             }
         }
     }
