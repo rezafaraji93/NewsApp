@@ -7,5 +7,5 @@ sealed class BreakingNewsEvent {
     object LoadedPage : BreakingNewsEvent()
     object OnRefresh : BreakingNewsEvent()
     data class OnError(val message: String) : BreakingNewsEvent()
-    data class ClickedOnArticle(val article: Article, val slide: Int) : BreakingNewsEvent()
+    data class ClickedOnArticle(val article: Article) : BreakingNewsEvent()
 }

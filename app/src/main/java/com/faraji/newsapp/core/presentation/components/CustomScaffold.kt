@@ -1,6 +1,5 @@
 package com.faraji.newsapp.core.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -9,12 +8,17 @@ import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Looks
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.faraji.newsapp.R
 import com.faraji.newsapp.core.domain.models.BottomNavItem
+import com.faraji.newsapp.core.presentation.ui.theme.HintGray
 import com.faraji.newsapp.core.util.Screen
 
 @Composable
@@ -45,6 +49,8 @@ fun CustomScaffold(
     ),
     content: @Composable () -> Unit
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
@@ -57,16 +63,47 @@ fun CustomScaffold(
                 ) {
                     BottomNavigation {
                         bottomNavItems.forEach { bottomNavItems ->
-                            CustomBottomNavItem(
-                                icon = bottomNavItems.icon,
-                                text = bottomNavItems.text,
-                                contentDescription = bottomNavItems.contentDescription,
-                                selected = bottomNavItems.route == navController.currentDestination?.route,
-                                enabled = bottomNavItems.icon != null
-                            ) {
-                                if (navController.currentDestination?.route != bottomNavItems.route)
-                                    navController.navigate(bottomNavItems.route)
-                            }
+                            BottomNavigationItem(
+                                selected = currentDestination?.hierarchy?.any { it.route == bottomNavItems.route } == true,
+                                onClick = {
+                                    navController.navigate(bottomNavItems.route) {
+                                        launchSingleTop = true
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        restoreState = true
+                                    }
+                                },
+                                alwaysShowLabel = false,
+                                icon = {
+                                    if (bottomNavItems.icon != null)
+                                        Icon(
+                                            imageVector = bottomNavItems.icon,
+                                            contentDescription = bottomNavItems.contentDescription
+                                        )
+                                },
+                                label = {
+                                    if (bottomNavItems.text != null)
+                                        Text(text = bottomNavItems.text)
+                                },
+                                selectedContentColor = MaterialTheme.colors.primary,
+                                unselectedContentColor = HintGray
+                            )
+//                            CustomBottomNavItem(
+//                                icon = bottomNavItems.icon,
+//                                text = bottomNavItems.text,
+//                                contentDescription = bottomNavItems.contentDescription,
+//                                selected = currentDestination?.hierarchy?.any { it.route == bottomNavItems.route } == true,
+//                                enabled = bottomNavItems.icon != null
+//                            ) {
+//                                navController.navigate(bottomNavItems.route) {
+//                                    launchSingleTop = true
+//                                    popUpTo(navController.graph.findStartDestination().id) {
+//                                        saveState = true
+//                                    }
+//                                    restoreState = true
+//                                }
+//                            }
                         }
                     }
                 }
@@ -77,7 +114,7 @@ fun CustomScaffold(
                 Snackbar(
                     snackbarData = data,
                     backgroundColor = MaterialTheme.colors.surface,
-                    contentColor = MaterialTheme.colors.onBackground
+                    contentColor = MaterialTheme.colors.onBackground,
                 )
             }
         },

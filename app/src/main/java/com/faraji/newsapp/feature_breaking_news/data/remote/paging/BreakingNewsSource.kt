@@ -7,7 +7,7 @@ import com.faraji.newsapp.core.domain.models.Article
 import okio.IOException
 import retrofit2.HttpException
 
-class CanadaBreakingNewsSource(
+class BreakingNewsSource(
     private val api: NewsApi,
     private val countryCode: String,
 ) : PagingSource<Int, Article>() {

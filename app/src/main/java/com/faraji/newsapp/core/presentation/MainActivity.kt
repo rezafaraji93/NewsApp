@@ -36,8 +36,6 @@ class MainActivity : ComponentActivity() {
             SideEffect {
                 systemUiController.setSystemBarsColor(MediumGray, darkIcons = useDarkIcons)
             }
-
-
             NewsAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
