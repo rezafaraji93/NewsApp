@@ -78,12 +78,12 @@ fun NewsDetailScreen(
                                 favicon: Bitmap?
                             ) {
                                 super.onPageStarted(view, url, favicon)
-                                viewModel.onEvent(NewsDetailEvent.isLoading(true))
+                                viewModel.onEvent(NewsDetailEvent.IsLoading(true))
                             }
 
                             override fun onPageFinished(view: WebView?, url: String?) {
                                 super.onPageFinished(view, url)
-                                viewModel.onEvent(NewsDetailEvent.isLoading(false))
+                                viewModel.onEvent(NewsDetailEvent.IsLoading(false))
                             }
                         }
                         webViewClient = webClient
