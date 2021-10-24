@@ -75,22 +75,9 @@ fun CustomScaffold(
                                         }
                                     }
                                 },
-                            )
-                            CustomBottomNavItem(
                                 icon = bottomNavItems.icon,
-                                text = bottomNavItems.text,
-                                contentDescription = bottomNavItems.contentDescription,
-                                selected = currentDestination == bottomNavItems.route,
-                                enabled = bottomNavItems.icon != null
-                            ) {
-                                navController.navigate(bottomNavItems.route) {
-                                    launchSingleTop = true
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    restoreState = true
-                                }
-                            }
+                                text = bottomNavItems.text
+                            )
                         }
                     }
                 }

@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BottomNavItem(
     val route: String,
-    val icon: ImageVector? = null,
-    val text: String? = null,
+    val icon: ImageVector,
+    val text: String,
     val contentDescription: String? = null,
     val alertCount: Int? = null
 )
