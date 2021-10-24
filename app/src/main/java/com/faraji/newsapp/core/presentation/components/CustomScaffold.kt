@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.faraji.newsapp.R
 import com.faraji.newsapp.core.domain.models.BottomNavItem
@@ -49,7 +49,7 @@ fun CustomScaffold(
     content: @Composable () -> Unit
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route
+    val currentDestination = navBackStackEntry?.destination
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
@@ -62,8 +62,8 @@ fun CustomScaffold(
                 ) {
                     BottomNavigation {
                         bottomNavItems.forEach { bottomNavItems ->
-                            CustomBottomNavItem(
-                                selected = currentDestination == bottomNavItems.route,
+                            BottomNavigationItem(
+                                selected = currentDestination?.hierarchy?.any { it.route == bottomNavItems.route } == true,
                                 onClick = {
                                     navController.navigate(bottomNavItems.route) {
                                         navController.graph.startDestinationRoute?.let { route ->
@@ -75,8 +75,18 @@ fun CustomScaffold(
                                         }
                                     }
                                 },
-                                icon = bottomNavItems.icon,
-                                text = bottomNavItems.text
+                                icon = {
+                                    Icon(
+                                        imageVector = bottomNavItems.icon,
+                                        contentDescription = bottomNavItems.contentDescription
+                                    )
+                                },
+                                label = {
+                                    Text(text = bottomNavItems.text)
+                                },
+                                alwaysShowLabel = false,
+                                selectedContentColor = MaterialTheme.colors.primary,
+                                unselectedContentColor = HintGray
                             )
                         }
                     }
