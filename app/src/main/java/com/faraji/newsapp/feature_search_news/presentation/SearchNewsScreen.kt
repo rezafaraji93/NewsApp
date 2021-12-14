@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -35,8 +34,8 @@ import timber.log.Timber
 @ExperimentalFoundationApi
 @Composable
 fun SearchNewsScreen(
-    navController: NavController,
     scaffoldState: ScaffoldState,
+    onDetailScreenClicked: (String) -> Unit,
     viewModel: SearchNewsViewModel = hiltViewModel()
 ) {
 
@@ -58,7 +57,7 @@ fun SearchNewsScreen(
                     )
                 }
                 is UiEvent.Navigate -> {
-                    navController.navigate(event.route)
+                    onDetailScreenClicked(event.route)
                 }
             }
         }

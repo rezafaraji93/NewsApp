@@ -34,20 +34,27 @@ fun Navigation(
         }
         composable(Screen.BreakingNewsScreen.route) {
             BreakingNewsScreen(
-                navController = navController,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                onDetailScreenClicked = {
+                    navController.navigate(it)
+                }
             )
         }
         composable(Screen.SavedNewsScreen.route) {
             SavedNewsScreen(
                 navController = navController,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                onDetailScreenClicked = {
+                    navController.navigate(it)
+                }
             )
         }
         composable(Screen.SearchNewsScreen.route) {
             SearchNewsScreen(
-                navController = navController,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                onDetailScreenClicked = {
+                    navController.navigate(it)
+                }
             )
         }
         composable(
@@ -96,4 +103,5 @@ fun Navigation(
             NewsDetailScreen(scaffoldState = scaffoldState)
         }
     }
+
 }

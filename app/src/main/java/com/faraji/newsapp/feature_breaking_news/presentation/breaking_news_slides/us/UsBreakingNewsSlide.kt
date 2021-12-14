@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 @ExperimentalFoundationApi
 @Composable
 fun UsBreakingNewsSlide(
-    navController: NavController,
     scaffoldState: ScaffoldState,
+    onNewsDetailScreenClicked: (String) -> Unit,
     viewModel: UsBreakingNewsViewModel = hiltViewModel()
 ) {
 
@@ -41,7 +41,7 @@ fun UsBreakingNewsSlide(
                     )
                 }
                 is UiEvent.Navigate -> {
-                    navController.navigate(event.route)
+                    onNewsDetailScreenClicked(event.route)
                 }
             }
         }

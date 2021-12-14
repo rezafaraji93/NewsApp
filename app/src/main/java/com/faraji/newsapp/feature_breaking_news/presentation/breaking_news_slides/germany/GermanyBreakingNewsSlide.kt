@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 @ExperimentalFoundationApi
 @Composable
 fun GermanyBreakingNewsSlide(
-    navController: NavController,
     scaffoldState: ScaffoldState,
+    onNewsDetailScreenClicked: (String) -> Unit,
     viewModel: GermanyBreakingNewsViewModel = hiltViewModel()
 ) {
     val news = viewModel.deNews?.collectAsLazyPagingItems()
@@ -40,7 +40,7 @@ fun GermanyBreakingNewsSlide(
                     )
                 }
                 is UiEvent.Navigate -> {
-                    navController.navigate(event.route)
+                    onNewsDetailScreenClicked(event.route)
                 }
             }
         }

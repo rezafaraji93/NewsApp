@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.faraji.newsapp.core.domain.models.Article
 import com.faraji.newsapp.core.presentation.components.ArticleItem
 import com.faraji.newsapp.core.util.UiEvent
 import com.faraji.newsapp.core.util.asString
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun SavedNewsScreen(
     navController: NavController,
     scaffoldState: ScaffoldState,
+    onDetailScreenClicked: (String) -> Unit = {},
     viewModel: SavedNewsViewModel = hiltViewModel()
 ) {
     val newsList = viewModel.state.value.articles
@@ -39,7 +41,7 @@ fun SavedNewsScreen(
                     )
                 }
                 is UiEvent.Navigate -> {
-                    navController.navigate(event.route)
+                    onDetailScreenClicked(event.route)
                 }
             }
         }

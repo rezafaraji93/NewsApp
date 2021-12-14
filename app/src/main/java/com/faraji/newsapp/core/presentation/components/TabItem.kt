@@ -13,43 +13,43 @@ typealias ComposableFun = @Composable () -> Unit
 @ExperimentalFoundationApi
 sealed class TabItem(var title: String, var screen: ComposableFun) {
     data class UsNews(
-        val navController: NavController,
-        val scaffoldState: ScaffoldState
+        val scaffoldState: ScaffoldState,
+        val navigationFunction: (String) -> Unit
     ) :
         TabItem(
             "United States",
             {
                 UsBreakingNewsSlide(
-                    navController = navController,
-                    scaffoldState = scaffoldState
+                    scaffoldState = scaffoldState,
+                    onNewsDetailScreenClicked = navigationFunction
                 )
             }
         )
 
     data class CaNews(
-        val navController: NavController,
-        val scaffoldState: ScaffoldState
+        val scaffoldState: ScaffoldState,
+        val navigationFunction: (String) -> Unit
     ) :
         TabItem(
             "Canada",
             {
                 CanadaBreakingNewsSlide(
-                    navController = navController,
-                    scaffoldState = scaffoldState
+                    scaffoldState = scaffoldState,
+                    onNewsDetailScreenClicked = navigationFunction
                 )
             }
         )
 
     data class DeNews(
-        val navController: NavController,
-        val scaffoldState: ScaffoldState
+        val scaffoldState: ScaffoldState,
+        val navigationFunction: (String) -> Unit
     ) :
         TabItem(
             "Germany",
             {
                 GermanyBreakingNewsSlide(
-                    navController = navController,
-                    scaffoldState = scaffoldState
+                    scaffoldState = scaffoldState,
+                    onNewsDetailScreenClicked = navigationFunction
                 )
             }
         )

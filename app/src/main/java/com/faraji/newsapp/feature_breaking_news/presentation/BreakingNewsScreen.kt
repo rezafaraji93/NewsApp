@@ -21,17 +21,23 @@ import kotlinx.coroutines.launch
 @ExperimentalFoundationApi
 @Composable
 fun BreakingNewsScreen(
-    navController: NavController,
     scaffoldState: ScaffoldState,
+    onDetailScreenClicked: (String) -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
 
     val tabs = listOf(
-        TabItem.UsNews(navController, scaffoldState),
-        TabItem.CaNews(navController, scaffoldState),
-        TabItem.DeNews(navController, scaffoldState)
+        TabItem.UsNews(scaffoldState) {
+            onDetailScreenClicked(it)
+        },
+        TabItem.CaNews(scaffoldState) {
+            onDetailScreenClicked(it)
+        },
+        TabItem.DeNews(scaffoldState) {
+            onDetailScreenClicked(it)
+        },
     )
 
     Box(
@@ -50,7 +56,7 @@ fun BreakingNewsScreen(
                         Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                     )
                 },
-                contentColor = MaterialTheme.colors.primary
+                contentColor = MaterialTheme.colors.primary,
             ) {
                 tabs.forEachIndexed { index, tabItem ->
                     Tab(
